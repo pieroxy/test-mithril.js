@@ -55,6 +55,20 @@ var Page = {
         }
       }, "Register log listener"),
       m("br"),
+      m("button", {
+        onclick:() => {
+          m.errorManager.addEventListener(
+            "fail",
+            (params, stopProcessing) => {
+              if (params.inView) {
+                stopProcessing()
+                return m(".red", "Component " + params.vnode.tag.name + " failed.")
+              }
+            }
+          )
+        }
+      }, "Register failure listener"),
+      m("br"),
     ]
   }
 }
