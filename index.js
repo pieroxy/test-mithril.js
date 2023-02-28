@@ -15,6 +15,7 @@ var Component2  = {
 var Page = {
   co1 : false,
   co2 : 0,
+  logs:[],
 
   view : function() {
     return [
@@ -34,11 +35,26 @@ var Page = {
           this.co1 = !this.co1;
         }
       }, "Show component 1 (throws in view)"),
+      m("br"),
       m("button", {
         onclick:() => {
           this.co2++;
         }
       }, "Increment counter of component 2"),
+      m("br"),
+      m("button", {
+        onclick:() => {
+          m.errorManager.addEventListener(
+            "log",
+            (params, stopProcessing) => {
+              this.logs.push(params.level + " :: " + params.message)
+              alert("There was an error. The message is " + params.message);
+              stopProcessing()
+            }
+          )
+        }
+      }, "Register log listener"),
+      m("br"),
     ]
   }
 }
@@ -46,9 +62,9 @@ var Page = {
 window.addEventListener("load", () => {
   console.log("Initializing");
   m.route.prefix="?";
-  m.errorManager.log = function(level, msg) {
+  /*m.errorManager.log = function(level, msg) {
     console.log(level + "::" + msg);
-  }
+  }*/
   let routes = {};
   routes["/"] = Page
   m.route(document.body, "/", routes);
