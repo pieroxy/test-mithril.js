@@ -1,26 +1,44 @@
-var Subco  = {
+var Component1  = {
   view : () => {
-    console.log("Here 2");
     throw "Ooops"
-    return [
-      m("", "Sub component"),
-    ]
   },
-  name:"Subco"
+  name:"Component1"
+}
+
+var Component2  = {
+  view : (vnode) => {
+    return vnode.attrs.counter + ""
+  },
+  name:"Component2",
 }
 
 var Page = {
-  subco : false,
-  view : () => {
-    console.log("Here");
+  co1 : false,
+  co2 : 0,
+
+  view : function() {
     return [
       m("", "Hello World"),
-      m("", this.subco ? m(Subco, {toto:2}) : "Unclicked"),
+      m("ul", [
+        m("li", [
+          m("span", "Component 1: "),
+          m("span", this.co1 ? m(Component1, {toto:2}) : "Unclicked")
+        ]),
+        m("li", [
+          m("span", "Component 2: "),
+          m("span", m(Component2, {counter:this.co2}))
+        ]),
+      ]),
       m("button", {
         onclick:() => {
-          this.subco = true;
+          this.co1 = !this.co1;
         }
-      }, "Click me")
+      }, "Show component 1 (throws in view)"),
+      m("button", {
+        onclick:() => {
+          this.co2++;
+        }
+      }, "Increment counter of component 2"),
     ]
   }
 }
